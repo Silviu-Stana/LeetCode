@@ -8,6 +8,7 @@ import {
     NotFoundError,
     currentUser,
 } from '@sealsdev/commonservice';
+import { createChargeRouter } from './routes/new';
 
 const app = express();
 app.set('trust proxy', true);
@@ -22,6 +23,7 @@ app.use(
     })
 );
 app.use(currentUser);
+app.use(createChargeRouter);
 
 //Route not found
 app.all('*', async (req, res) => {

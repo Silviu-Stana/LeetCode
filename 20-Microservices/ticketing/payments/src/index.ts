@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import { natsWrapper } from './nats-wrapper';
 import app from './app';
+import { OrderCreatedListener } from './events/listeners/order-created-listener';
+import { OrderCancelledListener } from './events/listeners/order-cancelled-listener';
 
 const start = async () => {
     //Typeguard for typescript to know: the environment variable is NOT undefined
@@ -30,6 +32,9 @@ const start = async () => {
     } catch (err) {
         console.error(err);
     }
+
+    new OrderCreatedListener(natsWrapper.client).listen();
+    new OrderCancelledListener(natsWrapper.client).listen();
 
     app.listen(3000, () => {
         console.log('Listen on 3000!!!');
